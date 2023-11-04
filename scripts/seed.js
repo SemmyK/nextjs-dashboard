@@ -24,14 +24,15 @@ async function seedUsers(client) {
 
 		// Insert data into the "users" table
 		const insertedUsers = await Promise.all(
-			users.map(async user => {
-				const hashedPassword = await bcrypt.hash(user.password, 10)
-				return client.sql`
+			users &&
+				users.map(async user => {
+					const hashedPassword = await bcrypt.hash(user.password, 10)
+					return client.sql`
         INSERT INTO users (id, name, email, password)
         VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword})
         ON CONFLICT (id) DO NOTHING;
       `
-			})
+				})
 		)
 
 		console.log(`Seeded ${insertedUsers.length} users`)
@@ -161,14 +162,18 @@ async function seedRevenue(client) {
 }
 
 async function main() {
-	const client = await db.connect()
+	try {
+		const client = await db.connect()
 
-	await seedUsers(client)
-	await seedCustomers(client)
-	await seedInvoices(client)
-	await seedRevenue(client)
+		await seedUsers(client)
+		await seedCustomers(client)
+		await seedInvoices(client)
+		await seedRevenue(client)
 
-	await client.end()
+		await client.end()
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 main().catch(err => {
