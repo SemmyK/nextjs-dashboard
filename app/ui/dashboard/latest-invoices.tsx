@@ -2,7 +2,6 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import Image from 'next/image'
 import { lusitana } from '@/app/ui/fonts'
-import { LatestInvoice } from '@/app/lib/definitions'
 import { fetchLatestInvoices } from '@/app/lib/data'
 import user from '../../../public/customers/user.png'
 export default async function LatestInvoices() {
@@ -27,7 +26,7 @@ export default async function LatestInvoices() {
 							>
 								<div className='flex items-center'>
 									<Image
-										src={invoice.image_url || user}
+										src={user}
 										alt={`${invoice.name}'s profile picture`}
 										className='mr-4 rounded-full'
 										width={32}
